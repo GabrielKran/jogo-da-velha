@@ -8,6 +8,9 @@ function introductionGame() {
 introductionGame();
 
 let gameStarted = false;
+let simboloJogadaHuman = '';
+let simboloJogadaComputer = '';
+
 function startGame() {
     if (gameStarted) {
         alert('O jogo já foi iniciado');
@@ -16,12 +19,16 @@ function startGame() {
 
     const whoStartGame = prompt('Olá jogador, digite abaixo "sim" para vc começar o jogo como X, ou "nao" para a máquina começar o jogo com X');
     if (whoStartGame === 'sim') {
-        playHuman();
         gameStarted = true;
+        simboloJogadaHuman = 'X';
+        simboloJogadaComputer = 'O';
+        gameController();
 
     } else if (whoStartGame === 'nao') {
-        playComputer();
         gameStarted = true;
+        simboloJogadaHuman = 'O';
+        simboloJogadaComputer = 'X';
+        gameController();
 
     } else {
         alert('Por favor, digite corretamente como foi pedido');
@@ -37,6 +44,7 @@ function playHuman() {
         if (choice === null) {
             alert('Jogo cancelado.');
             gameStarted = false;
+            displayBoard();
             break;
         }
 
@@ -50,9 +58,8 @@ function playHuman() {
             alert('Essa casa já está ocupada, escolha outra.');
 
         } else {
-            arrayBoard[index] = 'X';
+            arrayBoard[index] = simboloJogadaHuman;
             displayBoard();
-            playComputer();
             i++;
         }
         
@@ -60,7 +67,51 @@ function playHuman() {
 }
 
 function playComputer() {
-    const escolhas = arrayBoard;
+    let i = 0;
+    while (i < 1) {
+        const choice = Math.floor(Math.random() * arrayBoard.length);
+        
+        if (typeof arrayBoard[choice] !== 'number') {
+            console.log('Computador escolhue uma casa ocupada, escolhendo outra..');
+
+        } else {
+            arrayBoard[choice] = simboloJogadaComputer;
+            displayBoard();
+            i++;
+        }
+    }
+}
+
+function gameController() {
+    while(gameStarted) {
+        
+    }
+}
+
+function verifyWinner(symbol) {
+    const winnerCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    return winnerCombinations.some(combination => {
+        const [a, b, c] = combination;
+        return (
+            arrayBoard[a] === symbol &&
+            arrayBoard[b] === symbol &&
+            arrayBoard[c] === symbol
+        );
+    })
+}
+
+function verifyDraw () {
+    return arrayBoard.every(board => typeof board !== 'number');
 }
 
 function displayBoard() {
@@ -69,3 +120,5 @@ function displayBoard() {
     console.log(arrayBoard[3], arrayBoard[4], arrayBoard[5]);
     console.log(arrayBoard[6], arrayBoard[7], arrayBoard[8]);
 }
+
+console.log(verifyDraw());
