@@ -1,13 +1,14 @@
 const arrayBoard = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function introductionGame() {
-    // alert('Bem vindo ao jogo da velha, cada quadrado é representado por um número de 1 a 9, cada linha tem 3 números e assim cada um signifca cada quadrado respectivamente.\nClique no botão "iniciar" para dar início ao jogo.')
+    alert('Bem vindo ao jogo da velha, cada quadrado é representado por um número de 1 a 9, cada linha tem 3 números e assim cada um signifca cada quadrado respectivamente.\nClique no botão "iniciar" para dar início ao jogo.')
     displayBoard();
 }
 
 introductionGame();
 
 let gameStarted = false;
+let humanStartedGame = false;
 let simboloJogadaHuman = '';
 let simboloJogadaComputer = '';
 
@@ -22,6 +23,7 @@ function startGame() {
         gameStarted = true;
         simboloJogadaHuman = 'X';
         simboloJogadaComputer = 'O';
+        humanStartedGame = true;
         gameController();
 
     } else if (whoStartGame === 'nao') {
@@ -83,8 +85,44 @@ function playComputer() {
 }
 
 function gameController() {
-    while(gameStarted) {
-        
+    let whoPlay = humanStartedGame ? 'human' : 'computer';
+
+    while (gameStarted) {
+        if (whoPlay === 'human') {
+            playHuman();
+
+            if (verifyWinner(simboloJogadaHuman)) {
+                console.log(`Parabéns, você venceu jogando com ${simboloJogadaHuman}`);
+                alert(`Parabéns, você venceu jogando com ${simboloJogadaHuman}`);
+                break;
+            }
+
+            if (verifyDraw()) {
+                console.log('Empate..');
+                alert('Empate..')
+                break;
+            }
+
+            whoPlay = 'computer';
+
+        } else {
+            playComputer();
+
+            if (verifyWinner(simboloJogadaComputer)) {
+                console.log(`Sinto muito, vc perdeu para o computador.. Ele te venceu com ${simboloJogadaComputer}`);
+                alert(`Sinto muito, vc perdeu para o computador.. Ele te venceu com ${simboloJogadaComputer}`);
+                break;
+            }
+
+            if (verifyDraw()) {
+                console.log('Empate..');
+                alert('Empate..')
+                break;
+            }
+
+            whoPlay = 'human';
+
+        }
     }
 }
 
@@ -110,7 +148,7 @@ function verifyWinner(symbol) {
     })
 }
 
-function verifyDraw () {
+function verifyDraw() {
     return arrayBoard.every(board => typeof board !== 'number');
 }
 
@@ -120,5 +158,3 @@ function displayBoard() {
     console.log(arrayBoard[3], arrayBoard[4], arrayBoard[5]);
     console.log(arrayBoard[6], arrayBoard[7], arrayBoard[8]);
 }
-
-console.log(verifyDraw());
